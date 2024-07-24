@@ -22,23 +22,41 @@ public class BlackListRequestRoutes {
 
     @PostMapping("/")
     public ResponseEntity<?> addBlackList( @Valid @RequestBody BlackList blackList) {
-        blackListService.addToBlockList(blackList.getPhoneNumberList());
-        userService.changeStatusToBlockList(blackList.getPhoneNumberList());
-        return ResponseEntity.ok("Success Added to Block List");
+        try {
+            blackListService.addToBlockList(blackList.getPhoneNumberList());
+            userService.changeStatusToBlockList(blackList.getPhoneNumberList());
+            return ResponseEntity.ok("Success Added to Block List");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+        }
     }
 
     @DeleteMapping("/")
     public ResponseEntity<?> removeFromBlockList(@Valid @RequestBody BlackList blackList) {
-        blackListService.removeFromBlockList(blackList.getPhoneNumberList());
-        userService.changeStatusToWhiteList(blackList.getPhoneNumberList());
-        return ResponseEntity.ok("Success removed from Black List");
+        try {
+            blackListService.removeFromBlockList(blackList.getPhoneNumberList());
+            userService.changeStatusToWhiteList(blackList.getPhoneNumberList());
+            return ResponseEntity.ok("Success removed from Black List");
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+        }
     }
 
     @GetMapping("/")
     public ResponseEntity<?> getBlackList() {
-          return ResponseEntity.
-                  status(HttpStatus.OK)
-                  .body(userService.getAllBlackListNumbers());
+        try {
+            return ResponseEntity.
+                    status(HttpStatus.OK)
+                    .body(userService.getAllBlackListNumbers());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+        }
 
     }
 }

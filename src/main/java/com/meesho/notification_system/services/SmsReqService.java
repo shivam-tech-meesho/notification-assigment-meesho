@@ -2,7 +2,7 @@ package com.meesho.notification_system.services;
 
 import com.meesho.notification_system.dto.req.Sms;
 import com.meesho.notification_system.entities.SmsRequest;
-import com.meesho.notification_system.expection.SmsRequestException;
+import com.meesho.notification_system.exception.SmsRequestException;
 import org.springframework.stereotype.Service;
 
 @Service

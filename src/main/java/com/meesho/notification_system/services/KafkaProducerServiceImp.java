@@ -16,6 +16,10 @@ public class KafkaProducerServiceImp implements KafkaProducerService{
     @Override
     @Async
     public void sendMessage(Integer request_id)  {
-        kafkaTemplate.send("notifications",request_id);
+        try {
+            kafkaTemplate.send("notifications",request_id);
+        } catch (Exception e) {
+            System.out.println("Error in sending message to kafka" + e.getMessage());
+        }
     }
 }

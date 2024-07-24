@@ -1,29 +1,22 @@
 package com.meesho.notification_system.controllers;
 
 
-import com.meesho.notification_system.documents.SmsElastic;
 import com.meesho.notification_system.dto.req.Sms;
 import com.meesho.notification_system.dto.res.ErrorResponse;
 import com.meesho.notification_system.dto.res.SmsReqSuccess;
 import com.meesho.notification_system.dto.res.SuccessResponse;
 import com.meesho.notification_system.entities.SmsRequest;
-import com.meesho.notification_system.expection.SmsRequestException;
+import com.meesho.notification_system.exception.SmsRequestException;
 import com.meesho.notification_system.services.*;
 import com.meesho.notification_system.utils.DateAndTimeConversion;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequestMapping("/v1/sms")
@@ -34,7 +27,6 @@ public class SmsRequestRoutes {
 
     @Autowired
     private KafkaProducerService kafkaProducerService;
-
 
 
     @Autowired
@@ -80,25 +72,43 @@ public class SmsRequestRoutes {
     }
 
     @GetMapping("/get_sms")
-    public List<SmsElastic> searchSmsByDateRange(
+    public ResponseEntity<?> searchSmsByDateRange(
             @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime start,
             @RequestParam("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
             LocalDateTime end,
             @RequestParam("status") String status) {
 
-           long startEpoch = DateAndTimeConversion.convertToEpochMillis(start.toString());
-           long endEpoch = DateAndTimeConversion.convertToEpochMillis(end.toString());
+        try {
+            long startEpoch = DateAndTimeConversion.convertToEpochMillis(start.toString());
+            long endEpoch = DateAndTimeConversion.convertToEpochMillis(end.toString());
 
-           return elasticSearchServiceImp.getSms(startEpoch,endEpoch,status);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(elasticSearchServiceImp.getSms(startEpoch, endEpoch, status));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+        }
     }
 
-    @GetMapping("/search_sms")
-    public Page<SmsElastic> searchMessages(
+    @GetMapping( "/search_sms")
+    public ResponseEntity<?> searchMessages(
             @RequestParam String text,
             @RequestParam Integer page,
             @RequestParam Integer size) {
-        return elasticSearchServiceImp.searchMessages(text, page, size);
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(elasticSearchServiceImp.searchMessages(text, page, size));
+
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+
+        }
     }
 
 

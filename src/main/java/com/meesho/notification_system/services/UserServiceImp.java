@@ -15,31 +15,53 @@ public class UserServiceImp implements UserService{
 
     @Override
     public void createUser(String phoneNumber) {
-        User user = User.builder()
-                .phoneNumber(phoneNumber)
-                .status(User.Status.WHITELIST)
-                .build();
-        userRepo.save(user);
+        try {
+            User user = User.builder()
+                    .phoneNumber(phoneNumber)
+                    .status(User.Status.WHITELIST)
+                    .build();
+            userRepo.save(user);
+        } catch (Exception e) {
+            System.out.println("Error in creating user" + e.getMessage());
+        }
     }
 
     @Override
     public boolean isUser(String phoneNumber) {
-     return userRepo.existsByPhoneNumber(phoneNumber);
+        try {
+            return userRepo.existsByPhoneNumber(phoneNumber);
+        } catch (Exception e) {
+            System.out.println("Error in checking user" + e.getMessage());
+            return false;
+        }
     }
 
     @Override
     public void changeStatusToBlockList(List<String> numbers) {
-        userRepo.updateStatusToBlacklist(numbers);
+        try {
+            userRepo.updateStatusToBlacklist(numbers);
+        } catch (Exception e) {
+            System.out.println("Error in changing status to blacklist" + e.getMessage());
+        }
     }
 
     @Override
     public void changeStatusToWhiteList(List<String> numbers) {
-        userRepo.updateStatusToWhitelist(numbers);
+        try {
+            userRepo.updateStatusToWhitelist(numbers);
+        } catch (Exception e) {
+            System.out.println("Error in changing status to whitelist" + e.getMessage());
+        }
     }
 
     @Override
     public List<String> getAllBlackListNumbers() {
-        return userRepo.findAllBlacklistedNumbers();
+        try {
+            return userRepo.findAllBlacklistedNumbers();
+        } catch (Exception e) {
+            System.out.println("Error in getting all black list numbers" + e.getMessage());
+            return null;
+        }
     }
 
 

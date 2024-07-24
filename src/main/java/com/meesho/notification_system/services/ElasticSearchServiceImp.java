@@ -17,12 +17,22 @@ public class ElasticSearchServiceImp implements ElasticSearchService{
     private SmsElasticRepo smsElasticRepo;
     @Override
     public List<SmsElastic> getSms(long startMillis, long endMillis, String status) {
-        return smsElasticRepo.findByCreatedAtBetweenAndStatus(startMillis,endMillis,status);
+        try {
+            return smsElasticRepo.findByCreatedAtBetweenAndStatus(startMillis,endMillis,status);
+        } catch (Exception e) {
+            System.out.println("Error in getting sms from elastic search" + e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public Page<SmsElastic> searchMessages(String searchText, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return smsElasticRepo.findByMessageContaining(searchText, pageable);
+        try {
+            Pageable pageable = PageRequest.of(page, size);
+            return smsElasticRepo.findByMessageContaining(searchText, pageable);
+        } catch (Exception e) {
+            System.out.println("Error in searching messages from elastic search" + e.getMessage());
+            return null;
+        }
     }
 }
