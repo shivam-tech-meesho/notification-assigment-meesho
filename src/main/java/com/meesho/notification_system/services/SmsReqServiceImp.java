@@ -31,16 +31,11 @@ public class SmsReqServiceImp implements SmsReqService {
 
     @Override
     public SmsRequest getSmsRequest(int request_id) throws SmsRequestException {
-        try {
-            SmsRequest smsRequest = smsRequestRepo.findById(request_id);
-            if (smsRequest != null)
-                return smsRequest;
-            else {
-                throw new SmsRequestException("request_id " + request_id + " not found");
-            }
-        } catch (Exception e) {
-            System.out.println("Error in getting sms request" + e.getMessage());
-            throw e;
+        SmsRequest smsRequest = smsRequestRepo.findById(request_id);
+        if (smsRequest != null)
+            return smsRequest;
+        else {
+            throw new SmsRequestException("request_id " + request_id + " not found");
         }
     }
 }

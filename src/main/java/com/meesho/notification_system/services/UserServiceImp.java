@@ -15,7 +15,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void createUser(String phoneNumber) {
-        User user = User.builder()  
+        User user = User.builder()
                 .phoneNumber(phoneNumber)
                 .status(User.Status.WHITELIST)
                 .build();

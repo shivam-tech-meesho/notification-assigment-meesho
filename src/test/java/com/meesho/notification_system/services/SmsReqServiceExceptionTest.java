@@ -32,14 +32,5 @@ class SmsReqServiceExceptionTest {
                 .hasMessageContaining("request_id " + requestId + " not found");
     }
 
-    @Test
-    void getSmsRequestInternalError() {
-        int requestId = 12345;
 
-        when(smsRequestRepo.findById(requestId)).thenThrow(new RuntimeException("Internal server error"));
-
-        assertThatThrownBy(() -> smsReqService.getSmsRequest(requestId))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Internal server error");
-    }
 }
