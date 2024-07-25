@@ -42,7 +42,7 @@ public class SmsReqServiceImp implements SmsReqService {
             else{
                 throw new SmsRequestException("request_id " + request_id +  " not found");
             }
-        } catch (SmsRequestException e) {
+        } catch (Exception e) {
             System.out.println("Error in getting sms request" + e.getMessage());
             throw e;
         }

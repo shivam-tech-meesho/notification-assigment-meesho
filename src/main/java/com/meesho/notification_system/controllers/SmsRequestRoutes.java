@@ -68,6 +68,11 @@ public class SmsRequestRoutes {
                     .status(HttpStatus.NOT_FOUND)
                     .body(err);
         }
+        catch(Exception ex){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal server error");
+        }
 
     }
 
@@ -110,8 +115,4 @@ public class SmsRequestRoutes {
 
         }
     }
-
-
-
-
 }
