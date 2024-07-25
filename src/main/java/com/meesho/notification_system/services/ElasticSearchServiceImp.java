@@ -11,28 +11,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ElasticSearchServiceImp implements ElasticSearchService{
+public class ElasticSearchServiceImp implements ElasticSearchService {
 
     @Autowired
     private SmsElasticRepo smsElasticRepo;
+
     @Override
     public List<SmsElastic> getSms(long startMillis, long endMillis, String status) {
-        try {
-            return smsElasticRepo.findByCreatedAtBetweenAndStatus(startMillis,endMillis,status);
-        } catch (Exception e) {
-            System.out.println("Error in getting sms from elastic search" + e.getMessage());
-            return null;
-        }
+        return smsElasticRepo.findByCreatedAtBetweenAndStatus(startMillis, endMillis, status);
     }
 
     @Override
     public Page<SmsElastic> searchMessages(String searchText, int page, int size) {
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            return smsElasticRepo.findByMessageContaining(searchText, pageable);
-        } catch (Exception e) {
-            System.out.println("Error in searching messages from elastic search" + e.getMessage());
-            return null;
-        }
+        Pageable pageable = PageRequest.of(page, size);
+        return smsElasticRepo.findByMessageContaining(searchText, pageable);
+
     }
 }

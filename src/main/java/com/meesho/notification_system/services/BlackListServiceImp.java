@@ -21,46 +21,37 @@ public class BlackListServiceImp implements BlackListService {
 
 
     public void addToBlockList(List<String> numbers) {
-        try {
-            stringRedisTemplate.executePipelined(
-                    new RedisCallback<Object>() {
-                        public Object doInRedis(@NonNull RedisConnection connection) throws DataAccessException {
-                            StringRedisConnection stringRedisConn = (StringRedisConnection) connection;
-                            for (String number : numbers) {
-                                stringRedisConn.sAdd(Redis.BLOCKLIST_KEY, number);
-                            }
-                            return null;
+
+        stringRedisTemplate.executePipelined(
+                new RedisCallback<Object>() {
+                    public Object doInRedis(@NonNull RedisConnection connection) throws DataAccessException {
+                        StringRedisConnection stringRedisConn = (StringRedisConnection) connection;
+                        for (String number : numbers) {
+                            stringRedisConn.sAdd(Redis.BLOCKLIST_KEY, number);
                         }
-                    });
-        } catch (Exception e) {
-            System.out.println("Error in adding to block list" + e.getMessage());
-        }
+                        return null;
+                    }
+                });
+
     }
 
     public void removeFromBlockList(List<String> numbers) {
-        try {
-            stringRedisTemplate.executePipelined(
-                    new RedisCallback<Object>() {
-                        public Object doInRedis(@NonNull RedisConnection connection) throws DataAccessException {
-                            StringRedisConnection stringRedisConn = (StringRedisConnection) connection;
-                            for (String number : numbers) {
-                                stringRedisConn.sRem(Redis.BLOCKLIST_KEY, number);
-                            }
-                            return null;
+
+        stringRedisTemplate.executePipelined(
+                new RedisCallback<Object>() {
+                    public Object doInRedis(@NonNull RedisConnection connection) throws DataAccessException {
+                        StringRedisConnection stringRedisConn = (StringRedisConnection) connection;
+                        for (String number : numbers) {
+                            stringRedisConn.sRem(Redis.BLOCKLIST_KEY, number);
                         }
-                    });
-        } catch (Exception e) {
-            System.out.println("Error in removing from block list" + e.getMessage());
-        }
+                        return null;
+                    }
+                });
+
     }
 
     public boolean isBlocked(String number) {
-        try {
-            return Boolean.TRUE.equals(stringRedisTemplate.opsForSet().isMember(Redis.BLOCKLIST_KEY, number));
-        } catch (Exception e) {
-            System.out.println("Error in checking block list" + e.getMessage());
-            return false;
-        }
+        return Boolean.TRUE.equals(stringRedisTemplate.opsForSet().isMember(Redis.BLOCKLIST_KEY, number));
     }
 
 }

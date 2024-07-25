@@ -17,30 +17,26 @@ public class SmsReqServiceImp implements SmsReqService {
 
     @Override
     public SmsRequest createSmsRequest(Sms sms) {
-        try {
-            SmsRequest smsRequest = SmsRequest.builder()
-                    .message(sms.getMessage())
-                    .failureCode(null)
-                    .failureComments(null)
-                    .phoneNumber(sms.getPhoneNumber())
-                    .status(SmsRequest.Status.IN_PROGRESS)
-                    .build();
+        SmsRequest smsRequest = SmsRequest.builder()
+                .message(sms.getMessage())
+                .failureCode(null)
+                .failureComments(null)
+                .phoneNumber(sms.getPhoneNumber())
+                .status(SmsRequest.Status.IN_PROGRESS)
+                .build();
 
-            return smsRequestRepo.save(smsRequest);
-        } catch (Exception e) {
-            System.out.println("Error in creating sms request" + e.getMessage());
-            return null;
-        }
+        return smsRequestRepo.save(smsRequest);
+
     }
 
     @Override
     public SmsRequest getSmsRequest(int request_id) throws SmsRequestException {
         try {
-            SmsRequest  smsRequest = smsRequestRepo.findById(request_id);
-            if(smsRequest!=null)
+            SmsRequest smsRequest = smsRequestRepo.findById(request_id);
+            if (smsRequest != null)
                 return smsRequest;
-            else{
-                throw new SmsRequestException("request_id " + request_id +  " not found");
+            else {
+                throw new SmsRequestException("request_id " + request_id + " not found");
             }
         } catch (Exception e) {
             System.out.println("Error in getting sms request" + e.getMessage());
