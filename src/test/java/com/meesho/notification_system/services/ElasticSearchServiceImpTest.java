@@ -26,7 +26,6 @@ import static org.mockito.Mockito.*;
 class ElasticSearchServiceImpTest {
 
 
-
     @Mock
     private SmsElasticRepo smsElasticRepo;
 

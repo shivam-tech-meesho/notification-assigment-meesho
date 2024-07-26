@@ -34,6 +34,7 @@ public class KafkaConsumerServiceImp implements KafkaConsumerService{
             String message  = smsRequest.getMessage();
             String phoneNumber = smsRequest.getPhoneNumber();
 
+            // third party logic to send sms
 
             smsRequest.setStatus(SmsRequest.Status.SENT);
             smsRequestRepo.save(smsRequest);

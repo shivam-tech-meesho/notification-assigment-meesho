@@ -21,7 +21,6 @@ public class BlackListServiceImp implements BlackListService {
 
 
     public void addToBlockList(List<String> numbers) {
-
         stringRedisTemplate.executePipelined(
                 new RedisCallback<Object>() {
                     public Object doInRedis(@NonNull RedisConnection connection) throws DataAccessException {
@@ -32,7 +31,12 @@ public class BlackListServiceImp implements BlackListService {
                         return null;
                     }
                 });
+    }
 
+    public void addToBlockListWithoutPipelining(List<String> numbers) {
+        for (String number : numbers) {
+            stringRedisTemplate.opsForSet().add(Redis.BLOCKLIST_KEY, number);
+        }
     }
 
     public void removeFromBlockList(List<String> numbers) {
@@ -47,7 +51,6 @@ public class BlackListServiceImp implements BlackListService {
                         return null;
                     }
                 });
-
     }
 
     public boolean isBlocked(String number) {

@@ -32,5 +32,4 @@ class SmsReqServiceExceptionTest {
                 .hasMessageContaining("request_id " + requestId + " not found");
     }
 
-
 }
